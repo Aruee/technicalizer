@@ -75,8 +75,10 @@ public class TechnicalizerMain {
 					System.out.print(current.getX() + "," + current.getY() + " --> ");
 					for (int i = 0; i < points.size(); i++) {
 						Point toCheck = points.get(i);
-						if (	Math.abs(current.getX() - toCheck.getX()) < 2 &&
-								Math.abs(current.getY() - toCheck.getY()) < 2) {
+						if (	(Math.abs(current.getX() - toCheck.getX()) < 2 &&
+								Math.abs(current.getY() - toCheck.getY()) == 0) ||
+								(Math.abs(current.getY() - toCheck.getY()) < 2 &&
+								Math.abs(current.getX() - toCheck.getX()) == 0)) {
 							connection.add(toCheck);
 							current = toCheck;
 							points.remove(i);
