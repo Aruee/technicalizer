@@ -45,9 +45,9 @@ public class TechnicalizerMain {
 				for(int j = 0; j < img.getHeight(); j++) {
 					col = new Color(img.getRGB(i, j));
 					float brightness = (float)(
-							0.299 * col.getRed()   +
-							0.587 * col.getGreen() +
-							0.114 * col.getBlue()  );
+							2 * col.getRed()   +
+							4 * col.getGreen() +
+							1 * col.getBlue()  ) / 6f;
 					brightness /= 256f;
 					float r = rnd.nextFloat();
 					if (brightness < r) {
