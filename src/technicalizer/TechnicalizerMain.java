@@ -2,6 +2,7 @@ package technicalizer;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -65,6 +66,7 @@ public class TechnicalizerMain {
 				
 				Vector<Point> connection = new Vector<Point>();
 				connection.add(start);
+				connections.add(connection);
 				
 				Point current = start;
 
@@ -76,7 +78,8 @@ public class TechnicalizerMain {
 					for (int i = 0; i < points.size(); i++) {
 						Point toCheck = points.get(i);
 						if (	Math.abs(current.getX() - toCheck.getX()) < 2 &&
-								Math.abs(current.getY() - toCheck.getY()) < 2) {
+								Math.abs(current.getY() - toCheck.getY()) < 2 &&
+								!isCrossing(current, toCheck, connections)) {
 							connection.add(toCheck);
 							current = toCheck;
 							points.remove(i);
@@ -87,7 +90,7 @@ public class TechnicalizerMain {
 				}
 				System.out.println();
 				
-				connections.add(connection);
+				
 			}
 			
 			String svg = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\" ?><!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\"  \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\"><svg width=\"" + img.getWidth() + "\" height=\"" + img.getHeight() + "\" xmlns=\"http://www.w3.org/2000/svg\"  xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
@@ -119,5 +122,18 @@ public class TechnicalizerMain {
 			
 			System.out.println("Found " + connections.size() + " fancy connections");
 		}
+	}
+	
+	private static boolean isCrossing(Point sourceA, Point targetA, Vector<Vector<Point>> existing) {
+		for (Vector<Point> vector : existing) {
+			for (int i = 1; i < vector.size(); i++) {
+				if (vector.get(i) != sourceA && vector.get(i) != targetA) {
+					if (Line2D.linesIntersect(sourceA.getX(), sourceA.getY(), targetA.getX(), targetA.getY(), vector.get(i-1).getX(), vector.get(i-1).getY(), vector.get(i).getX(), vector.get(i).getY())) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 }
